@@ -1,2 +1,2 @@
-# ariregister_web
+# Äriregister Webapp
  Test ariregister for RIK
