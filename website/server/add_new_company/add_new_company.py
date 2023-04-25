@@ -12,4 +12,18 @@ def launch():
         
     return render_template('add_new_company/add_new_company.html')
 
+@add_new_company.route('/add_partner', methods=["POST"])
+def addPartner():
+    partner_name = request.form.get("partner_name")
+    partner_share = request.form.get("partner_share")
+
+    if len(partner_name) < 1:
+        flash("Partneri nimi peab olema täidetud", category="error")
+    
+    if partner_share < 1:
+        flash("Partneri osa peab olema vähemalt 1€", category="error")
+    
+    return
+
+
 

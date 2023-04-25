@@ -10,6 +10,6 @@ def launch():
 @index.route('/search', methods=["POST"])
 def search():
     if request.method == "POST":
-        print(request.form.get("search"))
+        search_string = request.form.get("search")
         
-    return "Success"
+    return f"Python back end recieved : {search_string}"

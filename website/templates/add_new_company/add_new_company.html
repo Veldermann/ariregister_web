@@ -7,14 +7,44 @@
     <div class="page-top-container">
         <h1>Lisa uus ettevõte</h1>
     </div>
+    
     <div class="form-group">
-        <label for="company-name">Ettevõtte nimi</lable>
+        <label for="company-name">Ettevõtte nimi</label>
         <input type="text" class="form-control" id="company-name" name="company-name" placehodler="Sisesta ettevõtte nimi" />
     </div>
+
     <div class="form-group">
-        <label for="registration-code">Registrikood</lable>
+        <label for="registration-code">Registrikood</label>
         <input type="text" class="form-control" id="registration-code" name="registration-code" placehodler="Sisesta registrikood" />
     </div>
+
+    <div class="form-group">
+        <label for="registration-date">Asutamise Kuupäev</label>
+        <input type="date" class="form-control" id="registration-date" name="registration-date" placehodler="Registreerimis kuupäev" max="2023-01-01" />
+    </div>
+
+    <div class="form-group">
+        <label for="total-capital">Kogukapitali suurus (min 2500€)</label>
+        <input type="number" class="form-control" id="total-capital" name="total-capital" placehodler="Sisesta kogukapitali summa" min="2500" />
+    </div>
+
+    <div class="form-group row">
+        <label for="add-partner-name" class="col-8">Osaniku nimi</label>
+        <label for="add-partner-share" class="col-3">Osaniku osa suurus (min 1€)</label>
+    </div>
+    <div class="form-group row">
+        <div class="col-8">
+            <input type="text" class="form-control" id="add-partner-name" name="add-partner-name" placehodler="Lisa osanik" />
+        </div>
+        <div class="col-3">
+            <input type="number" class="form-control" id="add-partners-share" name="add-partners-share" placehodler="Osaniku osa suurus" min="1"/>
+        </div>
+        <div class="col-1">
+            <a id="btn-add-partner" class="btn btn-primary" onclick="addPartner()">+</a>
+        </div>
+    </div>
+    <div id="added-partners" class="form-group"></div>
+
     <br />
     <button type="submit" class="btn btn-primary">Salvesta</button>
 </form>
