@@ -12,15 +12,17 @@ function search(element){
 
 // Top message handler
 class alertMessage {
-    constructor(message) {
-        if (message.error) {
-            for (const [key, value] of Object.entries(message.error)){
+    constructor(messages) {
+        if (messages.error.length > 0) {
+            console.log(messages.error)
+            for (const [key, value] of Object.entries(messages.error)){
                 this.showError(value);
             }
         }
 
-        if (message.success) {
-            for (const [key, value] of Object.entries(message.success)){
+        if (messages.success.length > 0) {
+            console.log(messages.success)
+            for (const [key, value] of Object.entries(messages.success)){
                 this.showSuccess(value);
             }
         }
@@ -32,24 +34,27 @@ class alertMessage {
                 <button type="button" class="close">
                     <span aria-hidden="true">×</span>
                 </button>
-        </div>`).insertAfter('nav').delay(7000).fadeOut(1000);
+        </div>`).insertAfter('nav').delay(7000).fadeOut(1000, function() {
+            $(this).remove();
+        });
         this.addClose();
     }
 
     showSuccess(message) {
         $(`<div class="alert alert-success alter-dismissable fade show" role="alert">
             ${message}
-            <button type="button" class="close" data-dismiss="alert">
+            <button type="button" class="close">
                 <span aria-hidden="true">×</span>
             </button>
-        </div>`).insertAfter('nav').delay(7000).fadeOut(1000);
+        </div>`).insertAfter('nav').delay(7000).fadeOut(1000, function() {
+            $(this).remove();
+        });
         this.addClose();
     }
 
     addClose() {
         $(".close").on("click", function() {
-            console.log("Close clicked");
-            $(this).parent().hide();
+            $(this).parent().remove();
         });
     }
 }
@@ -65,8 +70,25 @@ function addPartner(){
             },
         success: function (data) {
             const alerts = new alertMessage(data)
-            $("#added-partners").append(`<div id='${partner_name}'>${partner_name}</div>`)
-            $("#add-partner").val("")
+            if (data.success.length > 0) {
+                $("#added-partners").append(`<div id="${partner_name}" class="row added-partner">
+                                                <div class="col-8">
+                                                    ${partner_name}
+                                                </div>
+                                                <div class="col-3">
+                                                    ${partner_share}
+                                                </div>
+                                                <div class="col-1">
+                                                    <a class="btn-remove-partner btn btn-danger">x</a>
+                                                </div>
+                                            </div>`);
+                $("#add-partner-name").val("");
+                $("#add-partner-share").val("");
+                $('.btn-remove-partner').on('click', function() {
+                    console.log("Clicked")
+                    $(this).parent().parent().remove();
+                })
+            }
         }
     })
 }

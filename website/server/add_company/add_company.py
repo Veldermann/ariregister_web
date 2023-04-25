@@ -18,17 +18,21 @@ def addPartner():
     partner_share = request.form.get("partner_share")
     print(type(partner_name))
     print(type(partner_share))
-    data = {"error": {}}
+    data = {"error": [], "success": []}
+
     if len(partner_name) < 1:
-        data["error"]["partner_name"] = "Partneri nimi peab olema täidetud"
+        data["error"].append("Partneri nimi peab olema täidetud")
         flash("error", category="success")
 
     if partner_share:
         if int(partner_share) < 1:
-            data["error"]["partner_share"] = "Partneri osa peab olema vähemalt 1€"
+            data["error"].append("Partneri osa peab olema vähemalt 1€")
     else:
-        data["error"]["partner_share"] = "Partneri osa peab olema vähemalt 1€"
+        data["error"].append("Partneri osa peab olema vähemalt 1€")
     
+    if not data["error"]:
+        data["success"].append("Osanik lisatud")
+
     return data
 
 
