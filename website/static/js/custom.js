@@ -10,18 +10,65 @@ function search(element){
     })
 }
 
-function addPartner(){
-    // add real logic to add partner
-    let partner_name = $("#add-partner").val()
-    let partner_share = $("#add-partner").val()
-    if (!partner_name) {
-        console.log("partner name can not be emty")
-        return
-    }
-    $("#added-partners").append(`<div id='${partner_name}'>${partner_name}</div>`)
-    $("#add-partner").val("")
+// Top message handler
+class alertMessage {
+    constructor(message) {
+        if (message.error) {
+            for (const [key, value] of Object.entries(message.error)){
+                this.showError(value);
+            }
+        }
 
-    console.log("Partner added")
+        if (message.success) {
+            for (const [key, value] of Object.entries(message.success)){
+                this.showSuccess(value);
+            }
+        }
+    }
+
+    showError(message) {
+        $(`<div class="alert alert-danger alter-dismissable fade show" role="alert">
+                ${message}
+                <button type="button" class="close">
+                    <span aria-hidden="true">×</span>
+                </button>
+        </div>`).insertAfter('nav').delay(7000).fadeOut(1000);
+        this.addClose();
+    }
+
+    showSuccess(message) {
+        $(`<div class="alert alert-success alter-dismissable fade show" role="alert">
+            ${message}
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>`).insertAfter('nav').delay(7000).fadeOut(1000);
+        this.addClose();
+    }
+
+    addClose() {
+        $(".close").on("click", function() {
+            console.log("Close clicked");
+            $(this).parent().hide();
+        });
+    }
+}
+
+function addPartner(){
+    let partner_name = $("#add-partner-name").val()
+    let partner_share = $("#add-partner-share").val()
+
+    $.ajax('/add_company/add_partner', {
+        type: 'POST',
+        data: {'partner_name': partner_name,
+               'partner_share': partner_share
+            },
+        success: function (data) {
+            const alerts = new alertMessage(data)
+            $("#added-partners").append(`<div id='${partner_name}'>${partner_name}</div>`)
+            $("#add-partner").val("")
+        }
+    })
 }
 
 $(document).ready(function(){
