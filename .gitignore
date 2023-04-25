@@ -1,0 +1,2 @@
+# Ignore all psycache folders
+__pycache__
