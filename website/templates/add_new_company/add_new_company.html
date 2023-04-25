@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title%}Äriregister - Lisa Uus{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <div class="page-top-container">
+        <h1>Lisa uus ettevõte</h1>
+    </div>
+    <div class="form-group">
+        <label for="company-name">Ettevõtte nimi</lable>
+        <input type="text" class="form-control" id="company-name" name="company-name" placehodler="Sisesta ettevõtte nimi" />
+    </div>
+    <div class="form-group">
+        <label for="registration-code">Registrikood</lable>
+        <input type="text" class="form-control" id="registration-code" name="registration-code" placehodler="Sisesta registrikood" />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Salvesta</button>
+</form>
+{% endblock %}
