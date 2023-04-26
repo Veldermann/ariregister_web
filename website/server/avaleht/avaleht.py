@@ -1,13 +1,13 @@
 from flask import Blueprint, render_template, request
 
-index = Blueprint('index', __name__)
+avaleht = Blueprint('avaleht', __name__)
 
-@index.route('/', methods=["GET", "POST"])
-def launch():
+@avaleht.route('/', methods=["GET", "POST"])
+def main():
     
-    return render_template('index/index.html')
+    return render_template('avaleht/avaleht.html')
 
-@index.route('/search', methods=["POST"])
+@avaleht.route('/search', methods=["POST"])
 def search():
     if request.method == "POST":
         search_string = request.form.get("search")

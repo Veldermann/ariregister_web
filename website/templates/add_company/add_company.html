@@ -25,27 +25,29 @@
 
     <div class="form-group">
         <label for="total-capital">Kogukapitali suurus (min 2500€)</label>
-        <input type="number" class="form-control" id="total-capital" name="total-capital" placehodler="Sisesta kogukapitali summa" min="2500" />
+        <input type="number" class="form-control" id="total-capital" name="total-capital" placehodler="Sisesta kogukapitali summa" value="0" />
     </div>
 
     <div class="form-group row">
-        <label for="add-partner-name" class="col-8">Osaniku nimi</label>
+        <label for="add-partner-name" class="col-7">Osaniku nimi</label>
         <label for="add-partner-share" class="col-3">Osaniku osa suurus (min 1€)</label>
     </div>
     <div class="form-group row">
-        <div class="col-8">
+        <div class="col-7">
             <input type="text" class="form-control" id="add-partner-name" name="add-partner-name" placehodler="Lisa osanik" />
         </div>
         <div class="col-3">
-            <input type="number" class="form-control" id="add-partner-share" name="add-partner-share" placehodler="Osaniku osa suurus" min="1"/>
+            <input type="number" class="form-control" id="add-partner-share" name="add-partner-share" placehodler="Osaniku osa suurus" value="0" />
         </div>
         <div class="col-1">
-            <a id="btn-add-partner" class="btn btn-primary" onclick="addPartner()">+</a>
+        </div>
+        <div class="col-1">
+            <a id="btn-add-partner" class="btn btn-primary" onclick="addPartner()"><i class="fa-solid fa-plus"></i></a>
         </div>
     </div>
     <div id="added-partners" class="form-group"></div>
 
     <br />
-    <button type="submit" class="btn btn-primary">Salvesta</button>
+    <a type="submit" class="btn btn-primary" onclick="saveCompany()">Salvesta</a>
 </form>
 {% endblock %}

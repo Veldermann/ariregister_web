@@ -3,10 +3,17 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-4.0.0.min.css')}}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.mins.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome/css/fontawesome.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome/css/solid.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome/css/brands.css')}}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}">
+        
+        <script language="JavaScript" type="text/javascript" src="{{ url_for('static', filename='js/fontawesome/fontawesome.js')}}"></script>
+        <script language="JavaScript" type="text/javascript" src="{{ url_for('static', filename='js/fontawesome/solid.js')}}"></script>
+        <script language="JavaScript" type="text/javascript" src="{{ url_for('static', filename='js/fontawesome/brands.js')}}"></script>
         <script language="JavaScript" type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.6.3.min.js')}}"></script>
+
         <script language="JavaScript" type="text/javascript" src="{{ url_for('static', filename='js/custom.js')}}"></script>
 
         <title>{% block title %}Index{% endblock %}</title>
