@@ -119,15 +119,21 @@ function editSavePartnerBtn(element) {
 function saveCompany() {
     let company_name = $("#company-name").val();
     let registration_code = $("#registration-code").val();
-    let total_capital = $("#total-capital").val();
-    console.log(company_name);
-    console.log(registration_code);
-    console.log(total_capital);
+    let total_capital = parseInt($("#total-capital").val());
+    let registration_date = $("#registration-date").val();
     let partners = [];
     $('#added-partners').children().each(function() {
-        partners.push([$(this).find('#partner-name').val(), $(this).find('#partner-share').val()]);
-    })
+        partners.push([$(this).find('#partner-name').val(), parseInt($(this).find('#partner-share').val())]);
+    });
+    let data = {"company_name": company_name, "registration_code": registration_code, "total_capital": total_capital, "registration_date": registration_date, "partners": partners};
     console.log(partners);
+    $.ajax("/add_company", {
+        type: "POST",
+        data: data,
+        success: function(data) {
+            console.log(data)
+        }
+    })
 }
 
 $(document).ready(function(){

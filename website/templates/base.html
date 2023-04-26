@@ -29,7 +29,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar">
                 <div class="navbar-nav">
+                    {% if url_for(request.endpoint) != "/" %}
                     <a class="nav-item nav-link" id="index" href="/">Avaleht</a>
+                    {% endif %}
                     <a class="nav-item nav-link" id="add_company" href="/add_company">Lisa Uus</a>
                 </div>
             </div>

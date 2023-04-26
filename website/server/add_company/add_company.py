@@ -7,13 +7,8 @@ add_company = Blueprint('add_company', __name__)
 @add_company.route('/', methods=["GET", "POST"])
 def main():
     if request.method == "POST":
-        check = form_controll.FormControll(request)
-        company_name = request.form.get("company-name")
-        registration_code = request.form.get("registration-code")
-        partner_name = request.form.get("partner-name")
-        print(partner_name)
-        flash("Ettevõte lisatud", category="success")
-        #return redirect('/')
+        data = formControll(request)
+        return data
         
     return render_template('add_company/add_company.html')
 
@@ -53,5 +48,6 @@ def addPartner():
         
     return data
 
-
-
+def formControll(data):
+    asd = form_controll.FormControll(data)
+    return "Checked the form"
