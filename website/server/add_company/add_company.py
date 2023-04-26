@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect
-from . import form_controll
+from .form_validator import FormValidator
 import math
 
 add_company = Blueprint('add_company', __name__)
@@ -49,5 +49,13 @@ def addPartner():
     return data
 
 def formControll(data):
-    asd = form_controll.FormControll(data)
-    return "Checked the form"
+    validate_form = FormValidator(data)
+    messages = validate_form.validate()
+    if not messages["error"]:
+        print(validate_form.validatedData())
+        return {"success": ["Ettevõte edukalt lisatud."]}
+
+    return messages
+
+def saveCompany(data):
+    return

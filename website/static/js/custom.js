@@ -6,13 +6,15 @@ function search(element){
         data: {"search": element.value},
         success: function (data) {
             console.log(data)
-        }
+        
     })
 }
 
 // Top message handler
 class alertMessage {
     constructor(messages) {
+        $(".current-message").remove()
+        $('<div class="current-message"></div>').insertAfter('nav')
         if (messages.error && messages.error.length > 0) {
             console.log(messages.error)
             for (const [key, value] of Object.entries(messages.error)){
@@ -29,24 +31,26 @@ class alertMessage {
     }
 
     showError(message) {
-        $(`<div class="alert alert-danger alter-dismissable fade show" role="alert">
-                ${message}
-                <button type="button" class="close">
-                    <span aria-hidden="true">×</span>
-                </button>
-        </div>`).insertAfter('nav').delay(7000).fadeOut(1000, function() {
+        $(".current-message").append(`
+        <div class="alert alert-danger alter-dismissable fade show" role="alert">
+            ${message}
+            <button type="button" class="close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>`).delay(7000).fadeOut(1000, function() {
             $(this).remove();
         });
         this.addClose();
     }
 
     showSuccess(message) {
-        $(`<div class="alert alert-success alter-dismissable fade show" role="alert">
+        $(".current-message").append(`
+        <div class="alert alert-success alter-dismissable fade show" role="alert">
             ${message}
             <button type="button" class="close">
                 <span aria-hidden="true">×</span>
             </button>
-        </div>`).insertAfter('nav').delay(7000).fadeOut(1000, function() {
+        </div>`).delay(7000).fadeOut(1000, function() {
             $(this).remove();
         });
         this.addClose();
@@ -121,17 +125,19 @@ function saveCompany() {
     let registration_code = $("#registration-code").val();
     let total_capital = parseInt($("#total-capital").val());
     let registration_date = $("#registration-date").val();
-    let partners = [];
+
+    partners = []
     $('#added-partners').children().each(function() {
-        partners.push([$(this).find('#partner-name').val(), parseInt($(this).find('#partner-share').val())]);
+        let partner_name = $(this).find('#partner-name').val();
+        let partner_share = parseInt($(this).find('#partner-share').val());
+        partners.push({"partner_name": partner_name, "partner_share": partner_share});
     });
-    let data = {"company_name": company_name, "registration_code": registration_code, "total_capital": total_capital, "registration_date": registration_date, "partners": partners};
-    console.log(partners);
+    var data = {"company_name": company_name, "registration_code": registration_code, "total_capital": total_capital, "registration_date": registration_date, "partners": partners};
     $.ajax("/add_company", {
         type: "POST",
         data: data,
         success: function(data) {
-            console.log(data)
+            const alerts = new alertMessage(data)
         }
     })
 }
