@@ -6,7 +6,7 @@ function search(element){
         data: {"search": element.value},
         success: function (data) {
             console.log(data)
-        
+        }
     })
 }
 
