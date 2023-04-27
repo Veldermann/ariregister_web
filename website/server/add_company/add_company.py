@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect
 from .form_validator import FormValidator
+from .save_company import saveCompany
 import math
 
 add_company = Blueprint('add_company', __name__)
@@ -17,10 +18,10 @@ def main():
 def addPartner():
     partner_name = request.form.get("partner_name")
     partner_share = request.form.get("partner_share")
+    partner_code = request.form.get("partner_code")
+    is_company = request.form.get("is_company")
     total_capital = request.form.get("total_capital")
     total_partners_share = request.form.get("total_partners_share")
-    print(total_capital)
-    print(total_partners_share)
     data = {"error": [], "success": []}
 
     if len(partner_name) < 1:
@@ -40,9 +41,15 @@ def addPartner():
     
     if total_partners_share != "NaN":
         if int(total_capital) < int(total_partners_share):
-            print(total_capital < total_partners_share)
             data["error"].append("Partnerite kogu osa ei tohi olla suurem kui kogukapital.")
-        
+    
+    if is_company == "true":
+        if len(partner_code) != 7:
+            data["error"].append("Osaniku registreerimiskood peab olema 7 numbrit.")
+    else:
+        if len(partner_code) != 11:
+            data["error"].append("Isikukood peab olema 11 numbrit.")
+
     if not data["error"]:
         data["success"].append("Osanik lisatud")
         
@@ -52,10 +59,8 @@ def formControll(data):
     validate_form = FormValidator(data)
     messages = validate_form.validate()
     if not messages["error"]:
-        print(validate_form.validatedData())
+        saveCompany(validate_form.validatedData())
         return {"success": ["Ettevõte edukalt lisatud."]}
 
     return messages
 
-def saveCompany(data):
-    return

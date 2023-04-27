@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from ... import getDatabaseConnection
 
 class FormValidator:
     def __init__(self, data):
@@ -78,10 +79,44 @@ class FormValidator:
         return data
     
     def validatedData(self):
+        share_holder_ids = []
+        holders_into_shares = {}
+        for partner, share in self.partners.items():
+            share_holder_id = self.getShareHolderId(partner)
+            share_holder_ids.append(share_holder_id)
+            holders_into_shares[share_holder_id] = {"name": partner, "share": share} 
+
         validated_data = {"company_name": self.company_name,
                 "registration_code": self.registration_code,
                 "registration_date": self.registration_date,
                 "total_capital": self.total_capital,
-                "partners": self.partners
+                "holders_into_shares": holders_into_shares,
+                "share_holder_ids": share_holder_ids
                 }
+        print(validated_data)
         return validated_data
+    
+    def getShareHolderId(self, share_holder):
+        cursor = getDatabaseConnection()
+        cursor.execute("""
+            SELECT id
+            FROM share_holders
+            WHERE name = %(name)s
+            """, {"name": share_holder})
+        result = cursor.fetchall()
+        if len(result) > 0:
+            return result[0][0]
+        
+        cursor.execute("""
+            INSERT INTO share_holders(name)
+            VALUES (%(name)s)
+            """, {"name": share_holder})
+        
+        cursor.execute("""
+            SELECT id
+            FROM share_holders
+            WHERE name = %(name)s
+            """, {"name": share_holder})
+        result = cursor.fetchall()
+
+        return result[0][0]

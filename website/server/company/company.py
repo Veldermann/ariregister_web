@@ -1,19 +1,15 @@
 from flask import Blueprint, render_template, request
 from ... import getDatabaseConnection
 
-avaleht = Blueprint('avaleht', __name__)
+company = Blueprint('company', __name__)
 
-@avaleht.route('/', methods=["GET", "POST"])
+@company.route('/', methods=["GET"])
 def main():
-    cursor = getDatabaseConnection()
-    cursor.execute("""
-        SELECT registration_code, name
-        FROM companys
-        """)
-    data = cursor.fetchall()
+    registration_code = int(request.args.get("registration_code"))
+    print(registration_code)
+    return render_template('company/company.html')
 
-    return render_template('avaleht/companies_table.html', data = data)
-
+"""
 @avaleht.route('/search', methods=["POST"])
 def search():
     if request.method == "POST":
@@ -21,3 +17,4 @@ def search():
         print(search_string)
         
     return f"Python back end recieved : {search_string}"
+"""

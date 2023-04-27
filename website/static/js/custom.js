@@ -16,14 +16,12 @@ class alertMessage {
         $(".current-message").remove()
         $('<div class="current-message"></div>').insertAfter('nav')
         if (messages.error && messages.error.length > 0) {
-            console.log(messages.error)
             for (const [key, value] of Object.entries(messages.error)){
                 this.showError(value);
             }
         }
 
         if (messages.success.length > 0) {
-            console.log(messages.success)
             for (const [key, value] of Object.entries(messages.success)){
                 this.showSuccess(value);
             }
@@ -65,7 +63,9 @@ class alertMessage {
 
 function addPartner(){
     let partner_name = $("#add-partner-name").val()
+    let partner_code = $("#add-partner-code").val()
     let partner_share = parseInt($("#add-partner-share").val())
+    let is_company = $("#is-company").is(":checked")
     let total_capital = $("#total-capital").val()
 
     let total_partners_share = 0
@@ -73,11 +73,13 @@ function addPartner(){
         total_partners_share += parseInt($(this).find('#partner-share').val())
     })
     total_partners_share += partner_share
-    console.log(total_partners_share);
+
     $.ajax('/add_company/add_partner', {
         type: 'POST',
         data: {'partner_name': partner_name,
+               'partner_code': partner_code,
                'partner_share': partner_share,
+               'is_company': is_company,
                'total_capital': total_capital,
                'total_partners_share': total_partners_share
             },
@@ -85,10 +87,13 @@ function addPartner(){
             const alerts = new alertMessage(data)
             if (data.success.length > 0) {
                 $("#added-partners").append(`<div id="${partner_name}" class="row added-partner">
-                                                <div class="col-7">
+                                                <div class="col-4">
                                                     <input type="text" id="partner-name" class="form-control" value="${partner_name}" disabled />
                                                 </div>
-                                                <div class="col-3">
+                                                <div class="col-4">
+                                                    <input type="text" id="partner-code" class="form-control" value="${partner_code}" disabled />
+                                                </div>
+                                                <div class="col-2">
                                                     <input type="number" id="partner-share" class="form-control" value="${partner_share}" disabled />
                                                 </div>
                                                 <div class="col-1">
@@ -99,6 +104,8 @@ function addPartner(){
                                                 </div>
                                             </div>`);
                 $("#add-partner-name").val("");
+                $("#add-partner-code").val("");
+                $("#is_company").prop( "checked", false );
                 $("#add-partner-share").val("");
             }
         }
@@ -152,4 +159,11 @@ $(document).ready(function(){
     }
     let current_day = current_date.getDate()
     $("#registration-date").attr("max", current_year + "-" + current_month + "-" + current_day)
-})
+
+    $(".company").css("cursor", "pointer");
+    $(".company").on("click", function() {
+        window.location.replace("/company?registration_code=" + $(this).attr('id'));
+        console.log($(this).attr('id'));
+    });
+});
+
