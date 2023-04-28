@@ -15,18 +15,17 @@ def webScraper(top_url):
     web_byte = urlopen(req).read()
 
     webpage_split = web_byte.decode('utf')
-    asd1 = webpage_split.split('<table class="data">')
+    split_one = webpage_split.split('<table class="data">')
 
-    for x in asd1:
-        asd2 = x.split(f'<td class="str"><a href="{top_url}')
-        #print(asd2)
-        for y in asd2:
-            asd3 = y.split('">')
-            if '<' not in asd3[1].split('</a>')[0]:
+    for x in split_one:
+        split_two = x.split(f'<td class="str"><a href="{top_url}')
+        for y in split_two:
+            name = y.split('">')
+            if '<' not in name[1].split('</a>')[0]:
                 if "pere" in url:
-                    perekonnanimed.append(asd3[1].split('</a>')[0])
+                    perekonnanimed.append(name[1].split('</a>')[0])
                 else:
-                    eesnimed.append(asd3[1].split('</a>')[0])
+                    eesnimed.append(name[1].split('</a>')[0])
                 
 webScraper("https://www.stat.ee/nimed/")
 webScraper("https://www.stat.ee/nimed/pere/")
