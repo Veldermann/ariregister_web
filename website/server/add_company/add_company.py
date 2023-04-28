@@ -14,24 +14,24 @@ def main():
     return render_template('add_company/add_company.html')
 
 
-@add_company.route('/add_partner', methods=["POST"])
-def addPartner():
-    partner_name = request.form.get("partner_name")
-    partner_share = request.form.get("partner_share")
-    partner_code = request.form.get("partner_code")
+@add_company.route('/add_shareholder', methods=["POST"])
+def addShareholder():
+    shareholder_name = request.form.get("shareholder_name")
+    share_size = request.form.get("share_size")
+    shareholder_code = request.form.get("shareholder_code")
     is_company = request.form.get("is_company")
     total_capital = request.form.get("total_capital")
-    total_partners_share = request.form.get("total_partners_share")
+    total_shareholders_share = request.form.get("total_shareholders_share")
     data = {"error": [], "success": []}
 
-    if len(partner_name) < 1:
-        data["error"].append("Partneri nimi peab olema täidetud.")
+    if len(shareholder_name) < 1:
+        data["error"].append("Osaniku nimi peab olema täidetud.")
 
-    if partner_share and partner_share != "NaN":
-        if int(partner_share) < 1:
-            data["error"].append("Partneri osa peab olema vähemalt 1€.")
+    if share_size and share_size != "NaN":
+        if int(share_size) < 1:
+            data["error"].append("Osaniku osa peab olema vähemalt 1€.")
     else:
-        data["error"].append("Partneri osa peab olema vähemalt 1€.")
+        data["error"].append("Osaniku osa peab olema vähemalt 1€.")
     
     if total_capital:
         if int(total_capital) < 2500:
@@ -39,15 +39,15 @@ def addPartner():
     else:
         data["error"].append("Kogukapital peab olema vähemalt 2500€.")
     
-    if total_partners_share != "NaN":
-        if int(total_capital) < int(total_partners_share):
-            data["error"].append("Partnerite kogu osa ei tohi olla suurem kui kogukapital.")
+    if total_shareholders_share != "NaN":
+        if int(total_capital) < int(total_shareholders_share):
+            data["error"].append("Osanikude kogu osa ei tohi olla suurem kui kogukapital.")
     
     if is_company == "true":
-        if len(partner_code) != 7:
+        if len(shareholder_code) != 7:
             data["error"].append("Osaniku registreerimiskood peab olema 7 numbrit.")
     else:
-        if len(partner_code) != 11:
+        if len(shareholder_code) != 11:
             data["error"].append("Isikukood peab olema 11 numbrit.")
 
     if not data["error"]:

@@ -1,4 +1,4 @@
-.added-partner {
+.added-shareholder {
     margin-top: 5px;
 }
 
@@ -20,4 +20,8 @@
 
 .company-name {
     text-align: right;
+}
+
+.btn-add-company {
+    text-align: center;
 }

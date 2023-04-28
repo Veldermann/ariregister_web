@@ -11,13 +11,25 @@ def main():
         FROM companys
         """)
     data = cursor.fetchall()
+    cursor.close()
 
     return render_template('avaleht/companies_table.html', data = data)
 
 @avaleht.route('/search', methods=["POST"])
 def search():
     if request.method == "POST":
+        data = []
+        search_by = request.form.get("search-by")
         search_string = request.form.get("search")
-        print(search_string)
+        cursor = getDatabaseConnection()
+        cursor.execute("""
+            SELECT *
+            FROM companys
+            WHERE name LIKE %(name)s
+            """, {"name" : "%" + search_string + "%"})
+        result = cursor.fetchall()
+        for company in result:
+            data.append({company[0]: company[1]})
+        cursor.close()
         
-    return f"Python back end recieved : {search_string}"
+    return data

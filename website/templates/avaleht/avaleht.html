@@ -6,9 +6,22 @@
 <div class="page-top-container">
     <h1>Äriregister Webapp</h1>
 </div>
-<div class="form-group">
-    <label for="search-company">Otsi ettevõtet</label>
-    <input type="text" class="form-control" id="search-company" name="search-company" placehodler="Sisesta ettevõtte nimi" onkeyup="search(this)"/>
+<div class="form-group row">
+    <label for="search-company" class="col-9">Otsi ettevõtet</label>
+    <label for="search-by" class="col-3">Mille järgi</label>
+</div>
+<div class="form-group row">
+    <div class="col-9">
+        <input type="text" class="form-control" id="search-company" name="search-company" placehodler="Sisesta ettevõtte nimi" onkeyup="searchAvaleht()"/>
+    </div>
+    <div class="col-3">
+        <select name="search-by" id="search-by" class="form-control" onchange="searchAvaleht()">
+            <option value="company-name" default>Ettevõtte nime</option>
+            <option value="registration-code">Registrikoodi</option>
+            <option value="shareholder-name">Osaniku nime</option>
+            <option value="presonal-code">Isikukoodi</option>
+        </select>
+    </div>
 </div>
 
 {% block companies_table %}

@@ -8,22 +8,22 @@ class FormValidator:
         self.registration_code = data.form.get("registration_code")
         self.registration_date = data.form.get('registration_date')
         self.total_capital = data.form.get("total_capital")
-        self.partners = {}
+        self.shareholders = {}
 
         first = True
-        partner_name = ""
-        partner_share = ""
+        shareholder_name = ""
+        share_size = ""
         for field in data.form:
-            if "partners" in field and first == True:
-                partner_name = data.form.get(field)
+            if "shareholders" in field and first == True:
+                shareholder_name = data.form.get(field)
                 first = False
                 continue
             
-            if "partners" in field and first == False:
-                partner_share = data.form.get(field)
-                self.partners[partner_name] = partner_share
-                partner_name = ""
-                partner_share = ""
+            if "shareholders" in field and first == False:
+                share_size = data.form.get(field)
+                self.shareholders[shareholder_name] = share_size
+                shareholder_name = ""
+                share_size = ""
                 first = True
                 continue
 
@@ -32,9 +32,9 @@ class FormValidator:
     def validate(self):
         data = {"error": [], "success": []}
         today = date.today()
-        partners_total_share = 0
-        for partner, share in self.partners.items():
-            partners_total_share += int(share)
+        shareholders_total_share = 0
+        for shareholder, share in self.shareholders.items():
+            shareholders_total_share += int(share)
 
         if self.company_name:
             """
@@ -42,7 +42,7 @@ class FormValidator:
             """
 
             # if select.count > 0:
-            # data["error"].append("Sellise nimega ettevõte on juba registrerritud.")
+            # data["error"].append("Sellise nimega ettevõte on juba registreeritud.")
             if len(self.company_name) < 3:
                 data["error"].append("Ettevõte nimi peab olema vähemalt 3 tähemäki pikk, kuid mitte pikem kui 100 tähemärki.")
         else:
@@ -66,11 +66,11 @@ class FormValidator:
         else:
             data["error"].append("Palun täida kogukaptali väli.")
 
-        if len(self.partners.items()) < 1:
+        if len(self.shareholders.items()) < 1:
             data["error"].append("Palun lisa vähemalt üks osanik")
 
         # This have calculating error somewhere, take a look asap
-        if int(self.total_capital) != partners_total_share:
+        if int(self.total_capital) != shareholders_total_share:
             data["error"].append("Osanikude osade summa peab võrduma kogukapitaliga.")
         
         if not data["error"]:
@@ -81,10 +81,10 @@ class FormValidator:
     def validatedData(self):
         share_holder_ids = []
         holders_into_shares = {}
-        for partner, share in self.partners.items():
-            share_holder_id = self.getShareHolderId(partner)
+        for shareholder, share in self.shareholders.items():
+            share_holder_id = self.getShareHolderId(shareholder)
             share_holder_ids.append(share_holder_id)
-            holders_into_shares[share_holder_id] = {"name": partner, "share": share} 
+            holders_into_shares[share_holder_id] = {"name": shareholder, "share": share} 
 
         validated_data = {"company_name": self.company_name,
                 "registration_code": self.registration_code,

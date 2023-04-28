@@ -5,7 +5,7 @@ import random
 eesnimed = []
 perekonnanimed = []
 
-def webScraper(top_url):
+def webScraper(top_url, list):
     url = f"{top_url}TOP"
 
     req = Request(
@@ -22,13 +22,10 @@ def webScraper(top_url):
         for y in split_two:
             name = y.split('">')
             if '<' not in name[1].split('</a>')[0]:
-                if "pere" in url:
-                    perekonnanimed.append(name[1].split('</a>')[0])
-                else:
-                    eesnimed.append(name[1].split('</a>')[0])
+                list.append(name[1].split('</a>')[0])
                 
-webScraper("https://www.stat.ee/nimed/")
-webScraper("https://www.stat.ee/nimed/pere/")
+webScraper("https://www.stat.ee/nimed/", eesnimed)
+webScraper("https://www.stat.ee/nimed/pere/", perekonnanimed)
 
 isikud = []
 existing_elevens = []
