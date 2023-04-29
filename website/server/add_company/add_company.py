@@ -33,16 +33,6 @@ def addShareholder():
     else:
         data["error"].append("Osaniku osa peab olema vähemalt 1€.")
     
-    if total_capital:
-        if int(total_capital) < 2500:
-            data["error"].append("Kogukapital peab olema vähemalt 2500€.")
-    else:
-        data["error"].append("Kogukapital peab olema vähemalt 2500€.")
-    
-    if total_shareholders_share != "NaN":
-        if int(total_capital) < int(total_shareholders_share):
-            data["error"].append("Osanikude kogu osa ei tohi olla suurem kui kogukapital.")
-    
     if is_company == "true":
         if len(shareholder_code) != 7:
             data["error"].append("Osaniku registreerimiskood peab olema 7 numbrit.")

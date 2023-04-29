@@ -166,26 +166,79 @@ function addShareholder(){
         success: function (data) {
             const alerts = new AlertMessageHanlder(data)
             if (data.success.length > 0) {
-                $("#added-shareholders").append(`<div id="${shareholder_name}" class="row added-shareholder">
-                                                <div class="col-2">
-                                                    <input type="text" id="shareholder-name" class="form-control" value="${shareholder_name}" disabled />
-                                                </div>
-                                                <div class="col-3">
-                                                    <input type="text" id="shareholder-lastname" class="form-control" value="${shareholder_lastname}" disabled />
-                                                </div>
-                                                <div class="col-3">
-                                                    <input type="text" id="shareholder-code" class="form-control" value="${shareholder_code}" disabled />
-                                                </div>
-                                                <div class="col-2">
-                                                    <input type="number" id="share-size" class="form-control" value="${share_size}" disabled />
-                                                </div>
-                                                <div class="col-1 btn-add-company">
-                                                    <a class="btn-edit-save-shareholder btn btn-secondary" onclick="editSaveShareholderBtn(this)"><i class="fa-solid fa-pencil"></i></a>
-                                                </div>
-                                                <div class="col-1 btn-add-company">
-                                                    <a class="btn-remove-shareholder btn btn-danger" onclick="removeShareholder(this)"><i class="fa-solid fa-trash"></i></a>
-                                                </div>
-                                            </div>`);
+                if (is_company && !$('#added-shareholders .added-companies').hasClass('added-companies')){
+                    $("#added-shareholders").append(`
+                        <div class="added-companies">
+                            <div class="form-group row">
+                                <label for="shareholder-name" class="col-4">Ettevõtte nimi</label>
+                                <label for="shareholder-code" class="col-4">Registrikood</label>
+                                <label for="share-size" class="col-2">Osa suurus</label>
+                                <label for="edit" class="col-1">Muuda</label>
+                                <label for="remove" class="col-1">Kustuta</label>
+                            </div>
+                        </div>
+                    `);
+                } 
+                if (!is_company && !$('#added-shareholders .added-shareholders').hasClass('added-shareholders')) {
+                    $("#added-shareholders").append(`
+                    <div class="added-shareholders">
+                        <div class="form-group row">
+                            <label for="shareholder-name" class="col-2">Eesnimi</label>
+                            <label for="shareholder-lastname" class="col-3">Perekonnanimi</label>
+                            <label for="shareholder-code" class="col-3">Isikukood</label>
+                            <label for="share-size" class="col-2">Osa suurus</label>
+                            <label for="edit" class="col-1">Muuda</label>
+                            <label for="delete" class="col-1">Kustuta</label>
+                        </div>
+                    </div>
+                `);
+
+                }
+
+                if (!is_company) {
+                    $("#added-shareholders .added-shareholders").append(`
+                        <div id="${shareholder_name}" class="row added-shareholder">
+                            <div class="col-2">
+                                <input type="text" name="shareholder-name" id="shareholder-name" class="form-control" value="${shareholder_name}" disabled />
+                            </div>
+                            <div class="col-3">
+                                <input type="text" name="shareholder-lastname" id="shareholder-lastname" class="form-control" value="${shareholder_lastname}" disabled />
+                            </div>
+                            <div class="col-3">
+                                <input type="text" name="shareholder-code" id="shareholder-code" class="form-control" value="${shareholder_code}" disabled />
+                            </div>
+                            <div class="col-2">
+                                <input type="number" name="share-size" id="share-size" class="form-control" value="${share_size}" disabled />
+                            </div>
+                            <div class="col-1 btn-add-company">
+                                <a name="edit" class="btn-edit-save-shareholder btn btn-secondary" onclick="editSaveShareholderBtn(this)"><i class="fa-solid fa-pencil"></i></a>
+                            </div>
+                            <div class="col-1 btn-add-company">
+                                <a name="remove" class="btn-remove-shareholder btn btn-danger" onclick="removeShareholder(this)"><i class="fa-solid fa-trash"></i></a>
+                            </div>
+                        </div>
+                    `);
+                } else {
+                    $("#added-shareholders .added-companies").append(`
+                        <div id="${shareholder_name}" class="row added-shareholder">
+                            <div class="col-4">
+                                <input type="text" name="shareholder-name" id="shareholder-name" class="form-control" value="${shareholder_name}" disabled />
+                            </div>
+                            <div class="col-4">
+                                <input type="text" name="shareholder-code" id="shareholder-code" class="form-control" value="${shareholder_code}" disabled />
+                            </div>
+                            <div class="col-2">
+                                <input type="number" name="share-size" id="share-size" class="form-control" value="${share_size}" disabled />
+                            </div>
+                            <div class="col-1 btn-add-company">
+                                <a name="edit" class="btn-edit-save-shareholder btn btn-secondary" onclick="editSaveShareholderBtn(this)"><i class="fa-solid fa-pencil"></i></a>
+                            </div>
+                            <div class="col-1 btn-add-company">
+                                <a name="remove" class="btn-remove-shareholder btn btn-danger" onclick="removeShareholder(this)"><i class="fa-solid fa-trash"></i></a>
+                            </div>
+                        </div>
+                    `);       
+                }
                 $("#add-shareholder-name").val("");
                 $("#add-shareholder-code").val("");
                 $("#is_company").prop( "checked", false );
@@ -197,7 +250,10 @@ function addShareholder(){
 
 function removeShareholder(element) {
     $(element).parent().parent().remove();
-    const alerts = new alertMessage({"success": ["Osanik eemaldatud."]});
+    if ($(element).closest('.added-shareholders').children().length < 1){
+        $('.added-shareholders').remove();
+    }
+    const alerts = new AlertMessageHanlder({"success": ["Osanik eemaldatud."]});
 }
 
 function editSaveShareholderBtn(element) {
