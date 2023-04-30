@@ -138,8 +138,63 @@ class AlertMessageHanlder {
         });
     }
 }
+function addShareholder(element) {
+    let code = $(element).closest('.list-item').attr('id');
+    let name = $(element).closest('.list-item').find('.name').html();
+    let search_by = $('#shareholder-search-by').val();
+    let checked = false;
+    if (search_by == 'company-name' || search_by == 'registration-code') {
+        checked = true;
+    }
+    $("#added-shareholders").append(`
+        <div class="added-companies">
+            <div class="form-group row">
+                <label for="shareholder-name" class="col-3">Isiku-/Registrikood</label>
+                <label for="shareholder-code" class="col-4">Nimi</label>
+                <label for="share-size" class="col-3">Osa suurus</label>
+                <label for="is-company" class="col-1">Juuriidiline isik</label>
+                <label for="remove" class="col-1">Kustuta</label>
+            </div>
+        </div>
+    `);
+    let html = `
+        <div id="${code}" class="row added-shareholder">
+            <div class="col-3">
+                <input type="text" name="shareholder-name" id="shareholder-name" class="form-control" value="${code}" disabled />
+            </div>
+            <div class="col-4">
+                <input type="text" name="shareholder-lastname" id="shareholder-lastname" class="form-control" value="${name}" disabled />
+            </div>
+            <div class="col-3">
+                <input type="number" name="share-size" id="share-size" class="form-control" value="0" />
+            </div>
+            <div class="col-1 btn-add-company">
+    `;
 
-function addShareholder(){
+    if (checked) {
+        html += `
+                <input type="checkbox" class="form-control" id="is-company" name="is-company" placeholder="Juuriidiline isik" checked disabled/>
+        `;
+    } else {
+        html += `
+                <input type="checkbox" class="form-control" id="is-company" name="is-company" placeholder="Juuriidiline isik" disabled/>
+        `;
+    }
+
+    html += `
+            </div>
+            <div class="col-1 btn-add-company">
+                <a name="remove" class="btn-remove-shareholder btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+            </div>
+        </div>
+    `;
+    $('#added-shareholders').append(html);
+    $('.search-result-dropdown').html('');
+    $('.search-result-dropdown').css('display', 'none');
+    $('#search-person-company').val('');
+}
+
+function OLDaddShareholder(){
     let shareholder_name = $("#add-shareholder-name").val()
     let shareholder_lastname = $("#add-shareholder-lastname").val()
     let shareholder_code = $("#add-shareholder-code").val()
@@ -304,6 +359,56 @@ $(document).ready(function(){
     }
 });
 
+// Search person or company to add shareholder
+function searchByPersonName(element) {
+    $(element).parent().children('#result').html('');
+    let list = '';
+    let terms = autocompleteMatch($(element).val());
+    for (i=0; i<terms.length; i++) {
+        list += '<li>' + terms[i] + '</li>';
+    }
+    $(element).parent().children("#result").html('<ul>' + list + '</ul>');
+}
+var search_terms = ['Kerth', 'Kerth Veldermann', 'apple macbook', 'apple macbook pro', 'iphone', 'iphone 12'];
+function autocompleteMatch(input) {
+    if (input == '') {
+        return [];
+    }
+    var reg = new RegExp(input)
+    return search_terms.filter(function(term) {
+        if (term.match(reg)) {
+            return term;
+        }
+    });
+}
 
-
-
+function searchPersonCompany(){
+    // API call for dynamic person/company search result
+    $.ajax('/add_company/search_person_company', {
+        type: 'POST',
+        data: {"search_string": $("#search-person-company").val(),
+               "search_by": $("#shareholder-search-by").val()
+        },
+        success: function (data) {
+            $('.search-result-dropdown').html("");
+            if (data.length > 0) {
+                $('.search-result-dropdown').css('display', 'block');
+                data.forEach(element => {
+                    let code = element[0];
+                    let name = element[1];
+                    $('.search-result-dropdown').append(`
+                        <div id="${code}" class="list-item row">
+                            <div class="col-5 code">${code}</div>
+                            <div class="col-5 name">${name}</div>
+                            <div class="col-2">
+                                <a class="btn btn-primary" onclick="addShareholder(this)">+</i></a>
+                            </div>
+                        </div>
+                    `);
+                });
+            } else {
+                $('.search-result-dropdown').css('display', 'none');
+            }
+        }
+    })
+}

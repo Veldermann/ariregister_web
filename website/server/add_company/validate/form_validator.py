@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from ... import getDatabaseConnection
+from .... import getDatabaseConnection
 
 class FormValidator:
     def __init__(self, data):

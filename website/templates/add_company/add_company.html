@@ -27,6 +27,27 @@
         <label for="total-capital">Kogukapitali suurus (min 2500€)</label>
         <input type="number" class="form-control" id="total-capital" name="total-capital" placehodler="Sisesta kogukapitali summa" value="0" />
     </div>
+
+     <div class="form-group row">
+        <label for="search-person-company" class="col-9">Otsi füüsilist või juriidilist isikut:</label>
+        <label for="shareholder-search-by" class="col-3">Mille järgi:</label>
+    </div>
+    <div class="form-group row">
+        <div class="col-9">
+            <input type="text" class="form-control" id="search-person-company" name="search-person-company" onkeyup="searchPersonCompany()"/>
+            <div class="search-result-dropdown">
+            </div>
+        </div>
+        <div class="col-3">
+            <select name="shareholder-search-by" id="shareholder-search-by" class="form-control" onchange="searchPersonCompany()">
+                <option value="company_name" default>Juriidilise isiku nime</option>
+                <option value="registration_code">Registrikoodi</option>
+                <option value="person_name">Füüsilise isiku nime</option>
+                <option value="identification_number">Isikukoodi</option>
+            </select>
+        </div>
+    </div>
+<!--
     <div class="add-shareholder-content">
         <div class="form-group row">
             <label for="add-shareholder-name" class="col-2">Eesnimi</label>
@@ -37,25 +58,26 @@
         </div>
         <div class="form-group row">
             <div class="col-2">
-                <input type="text" class="form-control" id="add-shareholder-name" name="add-shareholder-name" placehodler="Lisa osaniku nimi" />
+                <input type="text" class="form-control" id="add-shareholder-name" name="add-shareholder-name" placehodler="Lisa osaniku nimi" onkeyup="searchByPersonName(this)" autocomplete="off" />
             </div>
             <div class="col-3">
-                <input type="text" class="form-control" id="add-shareholder-lastname" name="add-shareholder-lastname" placehodler="Lisa osaniku perekonnanimi" />
+                <input type="text" class="form-control" id="add-shareholder-lastname" name="add-shareholder-lastname" placehodler="Lisa osaniku perekonnanimi" onkeyup="searchByPersonLastname()" autocomplete="off" />
             </div>
             <div class="col-3">
-                <input type="text" class="form-control" id="add-shareholder-code" name="add-shareholder-code" placehodler="Lisa osaniku isikukood" />
+                <input type="text" class="form-control" id="add-shareholder-code" name="add-shareholder-code" placehodler="Lisa osaniku isikukood" onkeyup="searchByPersonIdentificationNumber()" autocomplete="off" />
             </div>
             <div class="col-2">
-                <input type="number" class="form-control" id="add-share-size" name="add-share-size" placehodler="Osaniku osa suurus" value="0" />
+                <input type="number" class="form-control" id="add-share-size" name="add-share-size" placehodler="Osaniku osa suurus" value="0" autocomplete="off" />
             </div>
             <div class="col-1 btn-add-company">
-                <input type="checkbox" class="form-control" id="is-company" name="is-company" placeholder="Juuriidilineisik" onchange="changeShareholderCompany()"/>
+                <input type="checkbox" class="form-control" id="is-company" name="is-company" placeholder="Juuriidilineisik" onchange="changeShareholderCompany()" />
             </div>
             <div class="col-1 btn-add-company">
                 <a id="btn-add-shareholder" class="btn btn-primary" onclick="addShareholder()"><i class="fa-solid fa-plus"></i></a>
             </div>
         </div>
     </div>
+-->
     <div id="added-shareholders" class="form-group"></div>
 
     <br />
