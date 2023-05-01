@@ -5,7 +5,7 @@ def getDatabaseConnection():
     config = configparser.ConfigParser()
     config.read('CONFIG.INI')
 
-    connection = psycopg2.connect(database="ariregister",
+    connection = psycopg2.connect(database=config['database']['database'],
                                   user=config['database']['username'],
                                   password=config['database']['password'],
                                   host=config['database']['host'], port=config['database']['port'])
