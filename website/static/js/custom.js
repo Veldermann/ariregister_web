@@ -151,7 +151,7 @@ function saveCompany() {
         success: function(data) {
             const alerts = new AlertMessageHanlder(data);
             if (data.success.length){
-                window.location.href = `/company?id${data.company_id}` ;
+                window.location.href = `/company?id=${data.company_id}` ;
             }
         }
     })
@@ -164,11 +164,15 @@ $(document).ready(function(){
         let current_date = new Date();
         let current_year = current_date.getFullYear();
         let current_month = current_date.getMonth() + 1;
+        let current_day = current_date.getDate();
 
         if (current_month + 1 < 10) {
             current_month = "0" + current_month;
         }
-        let current_day = current_date.getDate();
+        if (current_day + 1 < 10) {
+            current_day = "0" + current_day;
+        }
+
         $("#registration-date").attr("max", current_year + "-" + current_month + "-" + current_day);
     }
 });

@@ -17,6 +17,7 @@ def formControll(data):
     messages = validate_form.validate()
     if not messages['error']:
         company_id = saveCompany(validate_form.validatedData())
+        flash('Ettevõte edukalt lisatud.', category='success')
         return {'success': ['Ettevõte edukalt lisatud.'], 'company_id': company_id}
 
     return messages

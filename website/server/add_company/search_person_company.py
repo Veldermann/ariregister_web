@@ -16,7 +16,7 @@ def searchPersonCompany():
                     return searchByRegistrationCode(search_string)
                 case "person_name":
                     return searchByPersonName(search_string)
-                case "indentification_number":
+                case "identification_number":
                     return searchByIdentificationNumber(search_string)
     return []
 
