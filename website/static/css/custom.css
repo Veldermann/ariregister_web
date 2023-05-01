@@ -29,7 +29,7 @@
 .search-result-dropdown {
     display: none;
     overflow-y: auto;
-    height: 200px;
+    max-height: 200px;
 }
 
 .list-item {

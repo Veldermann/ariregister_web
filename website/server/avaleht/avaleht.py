@@ -8,7 +8,7 @@ avaleht = Blueprint('avaleht', __name__)
 def main():
     cursor = getDatabaseConnection()
     cursor.execute("""
-        SELECT registration_code, name
+        SELECT id, registration_code, name
         FROM company
         """)
     data = cursor.fetchall()
@@ -29,5 +29,5 @@ def search():
             case "shareholder_name":
                 data = searchByShareholderName(search_string)
             case "presonal_code":
-                data = searchByPersonalCode(search_string)
+                data = searchByIdentificationRegistrationCode(search_string)
     return data

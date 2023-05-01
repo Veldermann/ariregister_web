@@ -8,10 +8,11 @@ function searchAvaleht(){
         success: function (data) {
             $('.search-result').html("");
             data.forEach(element => {
-                registration_code = Object.keys(element);
-                company_name = element[registration_code];
+                let company_id = element['id']
+                let registration_code = element['registration_code'];
+                let company_name = element['name'];
                 $('.search-result').append(`
-                    <div id="${registration_code}" class="company row" onclick="goCompanyView(this)">
+                    <div id="${company_id}" class="company row" onclick="goCompanyView(this)">
                         <div class="company-registration-code col-6">${registration_code}</div>
                         <div class="company-name col-6">${company_name}</div>
                     </div>
@@ -22,7 +23,7 @@ function searchAvaleht(){
 }
 
 function goCompanyView(element){
-    window.location.replace("/company?registration_code=" + $(element).attr('id'));
+    window.location.replace("/company?id=" + $(element).attr('id'));
 }
 
 // Top message handler
@@ -127,16 +128,6 @@ function removeShareholder(element) {
     const alerts = new AlertMessageHanlder({"success": ["Osanik eemaldatud."]});
 }
 
-function editSaveShareholderBtn(element) {
-    if ($(element).parent().parent().find('#share-size').is(':disabled')) {
-        $(element).parent().parent().find('#share-size').prop('disabled', false);
-        $(element).html(`<i class="fas fa-save"></i>`)
-    } else {
-        $(element).parent().parent().find('#share-size').prop('disabled', true);
-        $(element).html('<i class="fa-solid fa-pencil"></i>') 
-    }
-}
-
 function saveCompany() {
     let company_name = $("#company-name").val();
     let registration_code = $("#registration-code").val();
@@ -160,7 +151,7 @@ function saveCompany() {
         success: function(data) {
             const alerts = new AlertMessageHanlder(data);
             if (data.success.length){
-                window.location.href = "/";
+                window.location.href = `/company?id${data.company_id}` ;
             }
         }
     })

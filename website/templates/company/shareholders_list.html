@@ -1,0 +1,29 @@
+{% extends 'company/company.html' %}
+
+{% block shareholders %}
+<div class="shareholders-list">
+    <h6>Osanikud:</h6>
+    <div class="row">
+        <div class="company-registration-code col-3">Isiku-/Registrikood</div>
+        <div class="company-name col-3">Isiku-/Ettevõtte nimi</div>
+        <div class="share-size col-3">Osa suurus</div>
+        <div class="is-founder col-2">Asutaja</div>
+    </div>
+    <div>
+    {% for shareholder in data['shareholders'] %}
+        <div id="{{ shareholder[0] }}" class="company row">
+            <div class="company-registration-code col-3">{{ shareholder[0] }}</div>
+            <div class="company-name col-3">{{ shareholder[1] }}</div>
+            <div class="share-size col-3">{{ shareholder[2] }}</div>
+            <div class="is-founder col-2">
+                {% if shareholder[3] == True %}
+                <input type="checkbox" disabled checked/>
+                {% else %}
+                <input type="checkbox" disabled/>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

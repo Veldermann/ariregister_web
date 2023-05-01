@@ -15,9 +15,9 @@ def main():
 def formControll(data):
     validate_form = FormValidator(data)
     messages = validate_form.validate()
-    if not messages["error"]:
-        saveCompany(validate_form.validatedData())
-        return {"success": ["Ettevõte edukalt lisatud."]}
+    if not messages['error']:
+        company_id = saveCompany(validate_form.validatedData())
+        return {'success': ['Ettevõte edukalt lisatud.'], 'company_id': company_id}
 
     return messages
 

@@ -33,7 +33,7 @@ def writeToDatabase(isikud):
             VALUES (%(identification_number)s, %(name)s, %(lastname)s)
             """, {"identification_number": isik[2], "name": isik[0], "lastname": isik[1]})
 
-def main():                
+def generatePersonData():                
     webScraper("https://www.stat.ee/nimed/", eesnimed)
     webScraper("https://www.stat.ee/nimed/pere/", perekonnanimed)
 
@@ -59,4 +59,4 @@ def main():
     return
 
 if __name__ == '__main__':
-    main()
+    generatePersonData()

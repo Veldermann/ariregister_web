@@ -1,7 +1,6 @@
 from ... import getDatabaseConnection
 
 def saveCompany(data):
-    print(data)
     cursor = getDatabaseConnection()
 
     cursor.execute("""
@@ -17,4 +16,5 @@ def saveCompany(data):
             VALUES (%(company_id)s, %(shareholder_id)s, %(share_size)s, %(is_founder)s, %(is_company)s)
             """, {"company_id": result[0], "shareholder_id": shareholder_id, "share_size": data["shareholders"][shareholder_id]["share_size"], "is_founder": "true", "is_company": data["shareholders"][shareholder_id]["is_company"]})
     cursor.close()
-    return
+
+    return result[0]

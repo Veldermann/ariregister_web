@@ -3,14 +3,14 @@
 {% block companies_table %}
 <div class="companies">
     <div class="row">
-        <div class="company-registration-code col-6"><h5>Registreerimiskood</h5></div>
+        <div class="company-registration-code col-6"><h5>Registrikood</h5></div>
         <div class="company-name col-6"><h5>Ettevõtte nimi</h5></div>
     </div>
     <div class="search-result">
     {% for company in data %}
         <div id="{{ company[0] }}" class="company row" onclick="goCompanyView(this)">
-            <div class="company-registration-code col-6">{{ company[0] }}</div>
-            <div class="company-name col-6">{{ company[1] }}</div>
+            <div class="company-registration-code col-6">{{ company[1] }}</div>
+            <div class="company-name col-6">{{ company[2] }}</div>
         </div>
     {% endfor %}
     </div>

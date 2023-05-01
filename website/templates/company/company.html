@@ -1,7 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div>
-    {{ data }}
+<div class="page-top-container">
+    <h1>{{ data['company'][2] }}</h1>
+</div>
+<div class="company_data">
+    <div class="registration_code">
+        Registrikood: {{ data['company'][1] }}
+    </div>
+    <div class="total_capital">
+        Kogukapital: {{ data['company'][3] }} €
+    </div>
+    <div class="data_established">
+        Asutamis kuupäev: {{ data['company'][4]}}
+    </div>
+</div>
+<div class="shareholders">
+    {% block shareholders %}
+    {% endblock %}
 </div>
 {% endblock %}
