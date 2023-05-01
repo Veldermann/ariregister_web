@@ -31,8 +31,9 @@
                 <div class="navbar-nav">
                     {% if url_for(request.endpoint) != "/" %}
                     <a class="nav-item nav-link" id="index" href="/">Avaleht</a>
-                    {% endif %}
+                    {% else %}
                     <a class="nav-item nav-link" id="add_company" href="/add_company">Lisa Uus Ettevõte</a>
+                    {% endif %}
                 </div>
             </div>
         </nav>

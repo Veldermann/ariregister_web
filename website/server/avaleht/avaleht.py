@@ -9,7 +9,7 @@ def main():
     cursor = getDatabaseConnection()
     cursor.execute("""
         SELECT registration_code, name
-        FROM companys
+        FROM company
         """)
     data = cursor.fetchall()
     cursor.close()

@@ -3,48 +3,59 @@ from .... import getDatabaseConnection
 
 class FormValidator:
     def __init__(self, data):
-        self.data = {}
-        self.company_name = data.form.get("company_name")
-        self.registration_code = data.form.get("registration_code")
-        self.registration_date = data.form.get('registration_date')
-        self.total_capital = data.form.get("total_capital")
+        print(data.form)
+        self.company_name = data.form.get('company_name')
+        self.registration_code = data.form.get('registration_code')
+        self.date_established = data.form.get('date_established')
+        self.total_capital = data.form.get('total_capital')
         self.shareholders = {}
+        
+        shareholder_id = 0
+        share_size = 0
+        is_company = False
 
-        first = True
-        shareholder_name = ""
-        share_size = ""
+        count = 0
         for field in data.form:
-            if "shareholders" in field and first == True:
-                shareholder_name = data.form.get(field)
-                first = False
+            if 'shareholders' in field and count == 0:
+                shareholder_id = data.form.get(field)
+                count += 1
                 continue
             
-            if "shareholders" in field and first == False:
+            if 'shareholders' in field and count == 1:
                 share_size = data.form.get(field)
-                self.shareholders[shareholder_name] = share_size
-                shareholder_name = ""
-                share_size = ""
-                first = True
+                count += 1
                 continue
 
-
+            if 'shareholders' in field and count == 2:
+                is_company = data.form.get(field)
+                self.shareholders[shareholder_id] = {'share_size': share_size, 'is_company': is_company}
+                shareholder_id = 0
+                share_size = 0
+                is_company = False
+                count = 0
+                continue
 
     def validate(self):
+        cursor = getDatabaseConnection()
         data = {"error": [], "success": []}
         today = date.today()
         shareholders_total_share = 0
-        for shareholder, share in self.shareholders.items():
-            shareholders_total_share += int(share)
+
+        for shareholder_id, shareholder_data in self.shareholders.items():
+            shareholders_total_share += int(self.shareholders[shareholder_id]['share_size'])
 
         if self.company_name:
-            """
-            SELECT name FROM companys WHERE name = self.company_name 
-            """
-
-            # if select.count > 0:
-            # data["error"].append("Sellise nimega ettevõte on juba registreeritud.")
             if len(self.company_name) < 3:
                 data["error"].append("Ettevõte nimi peab olema vähemalt 3 tähemäki pikk, kuid mitte pikem kui 100 tähemärki.")
+            else:
+                cursor.execute("""
+                    SELECT name
+                    FROM company
+                    WHERE name = %(name)s
+                    """, {'name': self.company_name})
+                result = cursor.fetchone()
+                if result:
+                    data["error"].append("Sellise nimega ettevõte on juba registreeritud.")
         else:
             data["error"].append("Ettevõtte nimi peab olema täidetud.")
 
@@ -54,10 +65,19 @@ class FormValidator:
             if self.registration_code.isnumeric() != True:
                 data["error"].append("Registrikood tohib sisaldada ainult numbreid.")
 
+            cursor.execute("""
+                SELECT registration_code
+                FROM company
+                WHERE CAST(registration_code AS TEXT) = %(registration_code)s
+                """, {'registration_code': self.registration_code})
+            result = cursor.fetchone()
+            if result:
+                data["error"].append("Sellise registrikoodiga ettevõte on juba olemas.")
+
         else:
             data["error"].append("Registrikood peab olema täidetud.")
 
-        if not self.registration_date:
+        if not self.date_established:
             data["error"].append("Palun vali asutamise kuupäev.")
 
         if self.total_capital and self.total_capital != "NaN":
@@ -69,54 +89,17 @@ class FormValidator:
         if len(self.shareholders.items()) < 1:
             data["error"].append("Palun lisa vähemalt üks osanik")
 
-        # This have calculating error somewhere, take a look asap
         if int(self.total_capital) != shareholders_total_share:
             data["error"].append("Osanikude osade summa peab võrduma kogukapitaliga.")
         
-        if not data["error"]:
-            print("No errors encountered")
-
+        cursor.close()
         return data
     
     def validatedData(self):
-        share_holder_ids = []
-        holders_into_shares = {}
-        for shareholder, share in self.shareholders.items():
-            share_holder_id = self.getShareHolderId(shareholder)
-            share_holder_ids.append(share_holder_id)
-            holders_into_shares[share_holder_id] = {"name": shareholder, "share": share} 
-
-        validated_data = {"company_name": self.company_name,
-                "registration_code": self.registration_code,
-                "registration_date": self.registration_date,
+        validated_data = {"registration_code": self.registration_code,
+                "name": self.company_name,
+                "date_established": self.date_established,
                 "total_capital": self.total_capital,
-                "holders_into_shares": holders_into_shares,
-                "share_holder_ids": share_holder_ids
+                "shareholders": self.shareholders
                 }
-        print(validated_data)
         return validated_data
-    
-    def getShareHolderId(self, share_holder):
-        cursor = getDatabaseConnection()
-        cursor.execute("""
-            SELECT id
-            FROM share_holders
-            WHERE name = %(name)s
-            """, {"name": share_holder})
-        result = cursor.fetchall()
-        if len(result) > 0:
-            return result[0][0]
-        
-        cursor.execute("""
-            INSERT INTO share_holders(name)
-            VALUES (%(name)s)
-            """, {"name": share_holder})
-        
-        cursor.execute("""
-            SELECT id
-            FROM share_holders
-            WHERE name = %(name)s
-            """, {"name": share_holder})
-        result = cursor.fetchall()
-
-        return result[0][0]

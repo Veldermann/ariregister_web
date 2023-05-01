@@ -1,17 +1,20 @@
 from ... import getDatabaseConnection
 
 def saveCompany(data):
+    print(data)
     cursor = getDatabaseConnection()
 
     cursor.execute("""
-                INSERT INTO companys(registration_code, name, total_capital, registration_date, share_holders, owners)
-                VALUES (%(registration_code)s, %(name)s, %(total_capital)s, %(registration_date)s, %(share_holders)s, %(owners)s)
-                """, {"registration_code": data["registration_code"], "name": data["company_name"], "total_capital": data["total_capital"], "registration_date": data["registration_date"], "share_holders": data["share_holder_ids"], "owners": data["share_holder_ids"]})
-    
-    for share_holder_id in data["share_holder_ids"]:
-        cursor.execute("""
-            INSERT INTO shares(holder_id, company_id, share_size)
-            VALUES (%(holder_id)s, %(company_id)s, %(share_size)s)
-            """, {"holder_id": share_holder_id, "company_id": data["registration_code"], "share_size": data["holders_into_shares"][share_holder_id]["share"]})
+                INSERT INTO company(registration_code, name, total_capital, date_established)
+                VALUES (%(registration_code)s, %(name)s, %(total_capital)s, %(date_established)s)
+                RETURNING id
+                """, {"registration_code": data["registration_code"], "name": data["name"], "total_capital": data["total_capital"], "date_established": data["date_established"]})
+    result = cursor.fetchone()
 
+    for shareholder_id in data["shareholders"]:
+        cursor.execute("""
+            INSERT INTO share(company_id, shareholder_id, share_size, is_founder, is_company)
+            VALUES (%(company_id)s, %(shareholder_id)s, %(share_size)s, %(is_founder)s, %(is_company)s)
+            """, {"company_id": result[0], "shareholder_id": shareholder_id, "share_size": data["shareholders"][shareholder_id]["share_size"], "is_founder": "true", "is_company": data["shareholders"][shareholder_id]["is_company"]})
+    cursor.close()
     return

@@ -30,9 +30,10 @@ def main():
         CREATE TABLE SHARE(
             id SERIAL PRIMARY KEY NOT NULL,
             company_id INT NOT NULL,
-            person_id INT NOT NULL,
+            shareholder_id INT NOT NULL,
             share_size INT NOT NULL,
-            is_founder BOOLEAN NOT NULL
+            is_founder BOOLEAN NOT NULL,
+            is_company BOOLEAN NOT NULL
             )
         """)
     cursor.close()

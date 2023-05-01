@@ -37,24 +37,6 @@
     margin-top: 5px;
 }
 
-
-
-
-/* Search person/compamy > add_company */
-#searchResultDropdown {
-    border: 1px dotted #ccc;
-    padding: 3px;
-    overflow-y: scroll;
-    height:400px;
-}
-#searchResultDropdown ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-#searchResultDropdown ul li {
-    padding: 5px 0;
-}
-#sear ul li:hover {
-    background: #eee;
+#added-shareholders {
+    display: none;
 }

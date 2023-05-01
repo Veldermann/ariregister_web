@@ -11,7 +11,7 @@ def searchByCompanyName(search_string):
     cursor = getDatabaseConnection()
     cursor.execute("""
         SELECT *
-        FROM companys
+        FROM company
         WHERE name LIKE %(name)s
         """, {"name" : "%" + search_string + "%"})
     result = cursor.fetchall()
@@ -23,7 +23,7 @@ def searchByRegistrationCode(search_string):
     cursor = getDatabaseConnection()
     cursor.execute("""
         SELECT *
-        FROM companys
+        FROM company
         WHERE CAST(registration_code as TEXT) LIKE %(registration_code)s
         """, {"registration_code" : "%" + search_string + "%"})
     result = cursor.fetchall()

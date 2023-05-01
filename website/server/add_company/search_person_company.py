@@ -23,7 +23,7 @@ def searchPersonCompany():
 def searchByPersonName(search_string):
     cursor = getDatabaseConnection()
     cursor.execute("""
-        SELECT identification_number, CONCAT(name, ' ', lastname)
+        SELECT id, identification_number, CONCAT(name, ' ', lastname)
         FROM person
         WHERE CONCAT(name, ' ', lastname) LIKE %(search_string)s
         LIMIT 100
@@ -36,7 +36,7 @@ def searchByPersonName(search_string):
 def searchByIdentificationNumber(search_string):
     cursor = getDatabaseConnection()
     cursor.execute("""
-        SELECT identification_number, CONCAT(name, ' ', lastname)
+        SELECT id, identification_number, CONCAT(name, ' ', lastname)
         FROM person
         WHERE CAST(identification_number AS TEXT) LIKE %(search_string)s
         LIMIT 100
@@ -49,7 +49,7 @@ def searchByIdentificationNumber(search_string):
 def searchByCompanyName(search_string):
     cursor = getDatabaseConnection()
     cursor.execute("""
-        SELECT registration_code, name
+        SELECT id, registration_code, name
         FROM company
         WHERE name LIKE %(search_string)s
         LIMIT 100
@@ -62,7 +62,7 @@ def searchByCompanyName(search_string):
 def searchByRegistrationCode(search_string):
     cursor = getDatabaseConnection()
     cursor.execute("""
-        SELECT registration_code, name
+        SELECT id, registration_code, name
         FROM company
         WHERE CAST(registration_code AS TEXT) LIKE %(search_string)s
         LIMIT 100

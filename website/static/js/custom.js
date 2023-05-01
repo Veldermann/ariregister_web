@@ -6,7 +6,6 @@ function searchAvaleht(){
                "search-by": $("#search-by").val()
         },
         success: function (data) {
-            console.log(data)
             $('.search-result').html("");
             data.forEach(element => {
                 registration_code = Object.keys(element);
@@ -17,7 +16,6 @@ function searchAvaleht(){
                         <div class="company-name col-6">${company_name}</div>
                     </div>
                 `);
-            // Make search results clickable
             });
         }
     })
@@ -25,67 +23,6 @@ function searchAvaleht(){
 
 function goCompanyView(element){
     window.location.replace("/company?registration_code=" + $(element).attr('id'));
-}
-
-function changeShareholderCompany(){
-    if ($("#is-company").is(":checked")){
-        $(".add-shareholder-content").html(`
-        <div class="form-group row">
-            <label for="add-shareholder-name" class="col-4">Ettevõtte nimi</label>
-            <label for="add-shareholder-code" class="col-4">Registrikood</label>
-            <label for="add-share-size" class="col-2">Osa suurus</label>
-            <label for="is-company" class="col-1">Juuriidiline- isik</label>
-        </div>
-        <div class="form-group row">
-            <div class="col-4">
-                <input type="text" class="form-control" id="add-shareholder-name" name="add-shareholder-name" placehodler="Lisa osaniku nimi" />
-            </div>
-            <div class="col-4">
-                <input type="text" class="form-control" id="add-shareholder-code" name="add-shareholder-code" placehodler="Lisa osaniku isikukood" />
-            </div>
-            <div class="col-2">
-                <input type="number" class="form-control" id="add-share-size" name="add-share-size" placehodler="Osaniku osa suurus" value="0" />
-            </div>
-            <div class="col-1 btn-add-company">
-                <input type="checkbox" class="form-control" id="is-company" name="is-company" placeholder="Juuriidilineisik" onchange="changeShareholderCompany()" checked/>
-            </div>
-            <div class="col-1 btn-add-company">
-                <a id="btn-add-shareholder" class="btn btn-primary" onclick="addShareholder()"><i class="fa-solid fa-plus"></i></a>
-            </div>
-        </div>
-        `)
-    } else {
-        $(".add-shareholder-content").html(`
-            <div class="form-group row">
-                <label for="add-shareholder-name" class="col-2">Eesnimi</label>
-                <label for="add-shareholder-name" class="col-3">Perekonnanimi</label>
-                <label for="add-shareholder-code" class="col-3">Isikukood</label>
-                <label for="add-share-size" class="col-2">Osa suurus</label>
-                <label for="is-company" class="col-1">Juuriidiline- isik</label>
-            </div>
-            <div class="form-group row">
-                <div class="col-2">
-                    <input type="text" class="form-control" id="add-shareholder-name" name="add-shareholder-name" placehodler="Lisa osaniku nimi" />
-                </div>
-                <div class="col-3">
-                    <input type="text" class="form-control" id="add-shareholder-lastname" name="add-shareholder-lastname" placehodler="Lisa osaniku perekonnanimi" />
-                </div>
-                <div class="col-3">
-                    <input type="text" class="form-control" id="add-shareholder-code" name="add-shareholder-code" placehodler="Lisa osaniku isikukood" />
-                </div>
-                <div class="col-2">
-                    <input type="number" class="form-control" id="add-share-size" name="add-share-size" placehodler="Osaniku osa suurus" value="0" />
-                </div>
-                <div class="col-1 btn-add-company">
-                    <input type="checkbox" class="form-control" id="is-company" name="is-company" placeholder="Juuriidilineisik" onchange="changeShareholderCompany()"/>
-                </div>
-                <div class="col-1 btn-add-company">
-                    <a id="btn-add-shareholder" class="btn btn-primary" onclick="addShareholder()"><i class="fa-solid fa-plus"></i></a>
-                </div>
-            </div>
-        `)
-    }
-    return
 }
 
 // Top message handler
@@ -139,174 +76,53 @@ class AlertMessageHanlder {
     }
 }
 function addShareholder(element) {
+    let id = $(element).closest('.list-item').attr('data-id');
     let code = $(element).closest('.list-item').attr('id');
     let name = $(element).closest('.list-item').find('.name').html();
     let search_by = $('#shareholder-search-by').val();
     let checked = false;
-    if (search_by == 'company-name' || search_by == 'registration-code') {
+    if (search_by == 'company_name' || search_by == 'registration_code') {
         checked = true;
     }
-    $("#added-shareholders").append(`
-        <div class="added-companies">
-            <div class="form-group row">
-                <label for="shareholder-name" class="col-3">Isiku-/Registrikood</label>
-                <label for="shareholder-code" class="col-4">Nimi</label>
-                <label for="share-size" class="col-3">Osa suurus</label>
-                <label for="is-company" class="col-1">Juuriidiline isik</label>
-                <label for="remove" class="col-1">Kustuta</label>
-            </div>
-        </div>
-    `);
+    if ($('#added-shareholders').children().length == 1){
+        $("#added-shareholders").css('display', 'block');
+    }
+
     let html = `
-        <div id="${code}" class="row added-shareholder">
+        <div id="${code}" class="row added-shareholder" data-id="${id}">
             <div class="col-3">
-                <input type="text" name="shareholder-name" id="shareholder-name" class="form-control" value="${code}" disabled />
+                <input type="text" name="shareholder-code" id="shareholder-code" class="form-control" value="${code}" disabled />
             </div>
             <div class="col-4">
-                <input type="text" name="shareholder-lastname" id="shareholder-lastname" class="form-control" value="${name}" disabled />
+                <input type="text" name="shareholder-name" id="shareholder-name" class="form-control" value="${name}" disabled />
             </div>
             <div class="col-3">
                 <input type="number" name="share-size" id="share-size" class="form-control" value="0" />
             </div>
-            <div class="col-1 btn-add-company">
-    `;
+            <div class="col-1 btn-add-company">`;
 
     if (checked) {
-        html += `
-                <input type="checkbox" class="form-control" id="is-company" name="is-company" placeholder="Juuriidiline isik" checked disabled/>
-        `;
+        html += `<input type="checkbox" class="form-control" id="is-company" name="is-company" placeholder="Juuriidiline isik" checked disabled/>`;
     } else {
-        html += `
-                <input type="checkbox" class="form-control" id="is-company" name="is-company" placeholder="Juuriidiline isik" disabled/>
-        `;
+        html += `<input type="checkbox" class="form-control" id="is-company" name="is-company" placeholder="Juuriidiline isik" disabled/>`;
     }
 
     html += `
             </div>
             <div class="col-1 btn-add-company">
-                <a name="remove" class="btn-remove-shareholder btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                <a name="remove" class="btn-remove-shareholder btn btn-danger" onclick="removeShareholder(this)"><i class="fa-solid fa-trash"></i></a>
             </div>
-        </div>
-    `;
+        </div>`;
     $('#added-shareholders').append(html);
     $('.search-result-dropdown').html('');
     $('.search-result-dropdown').css('display', 'none');
     $('#search-person-company').val('');
 }
 
-function OLDaddShareholder(){
-    let shareholder_name = $("#add-shareholder-name").val()
-    let shareholder_lastname = $("#add-shareholder-lastname").val()
-    let shareholder_code = $("#add-shareholder-code").val()
-    let share_size = parseInt($("#add-share-size").val())
-    let is_company = $("#is-company").is(":checked")
-    let total_capital = $("#total-capital").val()
-
-    let total_shareholders_share = 0
-    $("#added-shareholders").children().each(function() {
-        total_shareholders_share += parseInt($(this).find('#share-size').val())
-    })
-    total_shareholders_share += share_size
-
-    $.ajax('/add_company/add_shareholder', {
-        type: 'POST',
-        data: {'shareholder_name': shareholder_name,
-               'sharehodler_lastname': shareholder_lastname,
-               'shareholder_code': shareholder_code,
-               'share_size': share_size,
-               'is_company': is_company,
-               'total_capital': total_capital,
-               'total_shareholders_share': total_shareholders_share
-            },
-        success: function (data) {
-            const alerts = new AlertMessageHanlder(data)
-            if (data.success.length > 0) {
-                if (is_company && !$('#added-shareholders .added-companies').hasClass('added-companies')){
-                    $("#added-shareholders").append(`
-                        <div class="added-companies">
-                            <div class="form-group row">
-                                <label for="shareholder-name" class="col-4">Ettevõtte nimi</label>
-                                <label for="shareholder-code" class="col-4">Registrikood</label>
-                                <label for="share-size" class="col-2">Osa suurus</label>
-                                <label for="edit" class="col-1">Muuda</label>
-                                <label for="remove" class="col-1">Kustuta</label>
-                            </div>
-                        </div>
-                    `);
-                } 
-                if (!is_company && !$('#added-shareholders .added-shareholders').hasClass('added-shareholders')) {
-                    $("#added-shareholders").append(`
-                    <div class="added-shareholders">
-                        <div class="form-group row">
-                            <label for="shareholder-name" class="col-2">Eesnimi</label>
-                            <label for="shareholder-lastname" class="col-3">Perekonnanimi</label>
-                            <label for="shareholder-code" class="col-3">Isikukood</label>
-                            <label for="share-size" class="col-2">Osa suurus</label>
-                            <label for="edit" class="col-1">Muuda</label>
-                            <label for="delete" class="col-1">Kustuta</label>
-                        </div>
-                    </div>
-                `);
-
-                }
-
-                if (!is_company) {
-                    $("#added-shareholders .added-shareholders").append(`
-                        <div id="${shareholder_name}" class="row added-shareholder">
-                            <div class="col-2">
-                                <input type="text" name="shareholder-name" id="shareholder-name" class="form-control" value="${shareholder_name}" disabled />
-                            </div>
-                            <div class="col-3">
-                                <input type="text" name="shareholder-lastname" id="shareholder-lastname" class="form-control" value="${shareholder_lastname}" disabled />
-                            </div>
-                            <div class="col-3">
-                                <input type="text" name="shareholder-code" id="shareholder-code" class="form-control" value="${shareholder_code}" disabled />
-                            </div>
-                            <div class="col-2">
-                                <input type="number" name="share-size" id="share-size" class="form-control" value="${share_size}" disabled />
-                            </div>
-                            <div class="col-1 btn-add-company">
-                                <a name="edit" class="btn-edit-save-shareholder btn btn-secondary" onclick="editSaveShareholderBtn(this)"><i class="fa-solid fa-pencil"></i></a>
-                            </div>
-                            <div class="col-1 btn-add-company">
-                                <a name="remove" class="btn-remove-shareholder btn btn-danger" onclick="removeShareholder(this)"><i class="fa-solid fa-trash"></i></a>
-                            </div>
-                        </div>
-                    `);
-                } else {
-                    $("#added-shareholders .added-companies").append(`
-                        <div id="${shareholder_name}" class="row added-shareholder">
-                            <div class="col-4">
-                                <input type="text" name="shareholder-name" id="shareholder-name" class="form-control" value="${shareholder_name}" disabled />
-                            </div>
-                            <div class="col-4">
-                                <input type="text" name="shareholder-code" id="shareholder-code" class="form-control" value="${shareholder_code}" disabled />
-                            </div>
-                            <div class="col-2">
-                                <input type="number" name="share-size" id="share-size" class="form-control" value="${share_size}" disabled />
-                            </div>
-                            <div class="col-1 btn-add-company">
-                                <a name="edit" class="btn-edit-save-shareholder btn btn-secondary" onclick="editSaveShareholderBtn(this)"><i class="fa-solid fa-pencil"></i></a>
-                            </div>
-                            <div class="col-1 btn-add-company">
-                                <a name="remove" class="btn-remove-shareholder btn btn-danger" onclick="removeShareholder(this)"><i class="fa-solid fa-trash"></i></a>
-                            </div>
-                        </div>
-                    `);       
-                }
-                $("#add-shareholder-name").val("");
-                $("#add-shareholder-code").val("");
-                $("#is_company").prop( "checked", false );
-                $("#add-share-size").val("");
-            }
-        }
-    })
-}
-
 function removeShareholder(element) {
-    $(element).parent().parent().remove();
-    if ($(element).closest('.added-shareholders').children().length < 1){
-        $('.added-shareholders').remove();
+    $(element).closest('.added-shareholder').remove();
+    if ($('#added-shareholders').children().length == 1){
+        $('#added-shareholders').css('display', 'none');
     }
     const alerts = new AlertMessageHanlder({"success": ["Osanik eemaldatud."]});
 }
@@ -324,21 +140,28 @@ function editSaveShareholderBtn(element) {
 function saveCompany() {
     let company_name = $("#company-name").val();
     let registration_code = $("#registration-code").val();
+    let date_established = $("#registration-date").val();
     let total_capital = parseInt($("#total-capital").val());
-    let registration_date = $("#registration-date").val();
 
     shareholders = []
     $('#added-shareholders').children().each(function() {
-        let shareholder_name = $(this).find('#shareholder-name').val();
+        if ($(this).hasClass('added-shareholders-header')){
+            return;
+        }
+        let shareholder_id = $(this).attr('data-id');
         let share_size = parseInt($(this).find('#share-size').val());
-        shareholders.push({"shareholder_name": shareholder_name, "share_size": share_size});
+        let is_company = $(this).find('#is-company').is(':checked');
+        shareholders.push({'shareholder_id': shareholder_id, 'share_size': share_size, 'is_company': is_company});
     });
-    var data = {"company_name": company_name, "registration_code": registration_code, "total_capital": total_capital, "registration_date": registration_date, "shareholders": shareholders};
+    var data = {"company_name": company_name, "registration_code": registration_code, "total_capital": total_capital, "date_established": date_established, "shareholders": shareholders};
     $.ajax("/add_company", {
         type: "POST",
         data: data,
         success: function(data) {
-            const alerts = new AlertMessageHanlder(data)
+            const alerts = new AlertMessageHanlder(data);
+            if (data.success.length){
+                window.location.href = "/";
+            }
         }
     })
 }
@@ -359,29 +182,6 @@ $(document).ready(function(){
     }
 });
 
-// Search person or company to add shareholder
-function searchByPersonName(element) {
-    $(element).parent().children('#result').html('');
-    let list = '';
-    let terms = autocompleteMatch($(element).val());
-    for (i=0; i<terms.length; i++) {
-        list += '<li>' + terms[i] + '</li>';
-    }
-    $(element).parent().children("#result").html('<ul>' + list + '</ul>');
-}
-var search_terms = ['Kerth', 'Kerth Veldermann', 'apple macbook', 'apple macbook pro', 'iphone', 'iphone 12'];
-function autocompleteMatch(input) {
-    if (input == '') {
-        return [];
-    }
-    var reg = new RegExp(input)
-    return search_terms.filter(function(term) {
-        if (term.match(reg)) {
-            return term;
-        }
-    });
-}
-
 function searchPersonCompany(){
     // API call for dynamic person/company search result
     $.ajax('/add_company/search_person_company', {
@@ -394,10 +194,11 @@ function searchPersonCompany(){
             if (data.length > 0) {
                 $('.search-result-dropdown').css('display', 'block');
                 data.forEach(element => {
-                    let code = element[0];
-                    let name = element[1];
+                    let id = element[0]
+                    let code = element[1];
+                    let name = element[2];
                     $('.search-result-dropdown').append(`
-                        <div id="${code}" class="list-item row">
+                        <div id="${code}" class="list-item row" data-id="${id}">
                             <div class="col-5 code">${code}</div>
                             <div class="col-5 name">${name}</div>
                             <div class="col-2">
